@@ -9,7 +9,8 @@ const app = express();
 const apiKey = process.env.API_KEY
 const city = "4151824"
 
-//const url =  `http://api.openweathermap.org/data/2.5/weather?id=${city}&appid=${apiKey}`;
+
+const url =  `http://api.openweathermap.org/data/2.5/weather?id=${city}&appid=${apiKey}`;
 const host = "10.0.0.228"
 const port = '1883'
 const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
@@ -18,7 +19,14 @@ const connectUrl = `mqtt://${host}:${port}`
 const request = require('request');
 const bodyParser = require("body-parser");
 const msgpack = require('msgpack5')()
-, decode = msgpack.decode;
+, decode = msgpack.decode;444
+const weather = require('openweather-apis');
+weather.setLang('en');
+weather.setCityId(city);
+weather.setAPPID(apiKey);
+
+const {insertObj, retrieveObj} = require('./mongoClient');
+
 let soilMoisture;
 
 const client = mqtt.connect(connectUrl, {
@@ -35,11 +43,6 @@ client.on('connect', () => {
     client.subscribe([topic], () => {
     console.log(`Subscribe to topic '${topic}'`)
     })
-    // client.publish(topic, 'nodejs mqtt test', { qos: 0, retain: false }, (error) => {
-    //     if (error) {
-    //       console.error(error)
-    //     }
-    //   })
     
   })
 let test = '' //access payload globally, theres gotta be a better solution 
@@ -50,6 +53,7 @@ client.on('message', (topic, payload) => {
     let buff = new Buffer(test['payload'], 'base64');
     let unpacked = decode(buff);
     soilMoisture = unpacked;
+    updateDb(soilMoisture);
     
   })
 
@@ -66,39 +70,33 @@ client.on('reconnect', function() {
 });
 
 
+const updateDb = (soilMoisture) => {
+  
+  weather.getSmartJSON(async function(err, smart){
+		
+    let apiPackage = smart
+    apiPackage = Object.assign(apiPackage, soilMoisture); //data also contains vBat
+    
+    await insertObj(apiPackage);
+  });
+
+}
+updateDb({'soilMoisture' : 69, //test updateDb
+'VBat' : 100
+});
 
 
-// Have Node serve the files for our built React app
-let weather;
+
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//Request info on timeout. We have limited calls per month.
-// const reqPls = () => {
-// request(url, function(err, response, body) {
-
-//     // On return, check the json data fetched
-    
-//         weather = body;
-
-//       //console.log(JSON.parse(body).main.temp);
-//       })
-// }
-
-//where json data is sent for front end.
 app.get("/api", (req, res) => {
-  console.log(soilMoisture)
-  if (soilMoisture != undefined){
-    res.json(soilMoisture);
-  }else {
-    res.json("nothing");
-  }
+  
+  (async () => res.json(await retrieveObj()))() //f you async
   
 });
 
-//setTimeout(reqPls, 5000)
 
-// All other GET requests not handled before will return our React app
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
@@ -106,4 +104,6 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
   });
+
+
   

@@ -1,0 +1,2 @@
+
+client.on('reconnect', function() {
