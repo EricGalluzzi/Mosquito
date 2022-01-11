@@ -1,0 +1,55 @@
+//const [chart, setChart] = useState([])
+  //const[soilMoisture, setSoilMoisture] = useState([])
+  
+    
+    
+  // useEffect(()=>{
+  //   function fetchProps(){
+  //     setChart(chart)
+  //     setSoilMoisture(chart?.map(x=> x.temp))
+    
+    
+   
+    
+    
+  //   }
+    
+  //   fetchProps()
+  // }, []);
+  
+  
+    // useEffect(() => {
+    //     const fetchData = async () =>{
+    //         /*
+    //           new rest format
+    //           weatherApi pulls from /api/weather
+
+    //           will pull weather array of past temperature, descriptions, humidity, etc.
+
+    //           lastmeasured temp
+    //           lastmeasured description
+    //           lastmeasured humidity
+    //           last measured data
+              
+    //         */
+
+
+
+
+
+    //         Promise.all([
+    //           fetch(WeatherApiUrl).then((resp)=> resp.json()).then(weather => {
+                
+    //             setChart(weather)
+    //             setTemp([...temp, weather.main.temp])
+    //           })
+    //             //fetch('/api').then(resp => resp.json()).then(moisture => setSoilMoisture(moisture)),
+    //         ]).catch((error) => {
+    //             console.log(error);
+    //           });
+    //         }
+        
+    //     fetchData()
+
+
+    //     }, []);

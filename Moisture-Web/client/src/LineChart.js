@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-
+import { ProgressBar } from 'react-bootstrap';
 import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
@@ -21,107 +21,113 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-const cooperCityWeatherId = 4151824;
-const apiKey = process.env.REACT_APP_WEATHER_KEY;
 
 
 
 
 
-const WeatherApiUrl = `http://api.openweathermap.org/data/2.5/weather?id=${cooperCityWeatherId}&appid=${apiKey}`
 
-const LineChart = () => {
-    const [chart, setChart] = useState({})
-    const [temp, setTemp] = useState([])
-  
-  
-  
-    useEffect(() => {
-        const fetchData = async () =>{
-            /*
-              new rest format
-              weatherApi pulls from /api/weather
 
-              will pull weather array of past temperature, descriptions, humidity, etc.
+const LineChart = (chart) => {
+  let [vBat, setVBat] = useState(0)
+  useEffect(() => {
+    setVBat(chart ?.data ?.slice(-1).pop() ?.VBat) //some reason would'nt let me access vBat from final index like a normal person
 
-              lastmeasured temp
-              lastmeasured description
-              lastmeasured humidity
-              last measured data
-              
-            */
+  }, [chart]) //Rerenders when chart updates. Originally, vBat would remain unchanged since its state would never change. By passing the prop as an argument, the page renders with the asynchronous passing of chart (chart was passed through an async array)
 
 
 
 
 
-            Promise.all([
-              fetch(WeatherApiUrl).then((resp)=> resp.json()).then(weather => {
-                
-                setChart(weather)
-                setTemp([...temp, weather.main.temp])
-              })
-                //fetch('/api').then(resp => resp.json()).then(moisture => setSoilMoisture(moisture)),
-            ]).catch((error) => {
-                console.log(error);
-              });
-            }
-        
-        fetchData()
 
+  var data = {
+    labels: chart ?.data.map(x => String(x.expirationSet).substring(0, 10)),
+    datasets: [{
+      label: 'Temperature',
+      data: chart ?.data.map(x => x.temp),
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+      borderWidth: 1
+    }]
+  };
 
-        }, []);
-      
-  
-  
-    console.log("chart", chart);
-    
-    var data = {
-      labels: chart?.weather?.map(x => x.description),
-      datasets: [{
-        label: `${chart?.weather?.length}`,
-        data: temp,
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-      }]
-    };
-  
-    var options = {
-      maintainAspectRatio: false,
-      scales: {
+  var moistureData = {
+    labels: chart ?.data.map(x => x.description),
+    datasets: [{
+      label: 'Soil Moisture',
+      data: chart ?.data.map(x => x.soilMoisture),
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+      borderWidth: 1
+    }]
+  };
+
+  var options = {
+    maintainAspectRatio: false,
+    scales: {
+    },
+    legend: {
+      labels: {
+        fontSize: 25,
       },
-      legend: {
-        labels: {
-          fontSize: 25,
-        },
-      },
-    }
-  
-    return (
+    },
+  }
+
+
+  return (
+    <div>
+      <div className="progressBar">
+        Battery Voltage
+                <ProgressBar now={vBat} />
+        percentage: {vBat}
+      </div>
       <div>
         <Line
           data={data}
           height={400}
           options={options}
-  
+
         />
       </div>
-    )
-  }
-  
-  export default LineChart
+      <br />
+      <br />
+      <div className='moistureGraph'>
+        <Line
+          data={moistureData}
+          height={400}
+          options={options}
+        />
+
+      </div></div>
+  )
+}
+
+export default LineChart

@@ -1,62 +1,71 @@
 
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import 'react-bootstrap';
-import Nav from './features/navBar' ;
+import { ProgressBar } from 'react-bootstrap';
+
+import Nav from './features/navBar';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { Line } from 'react-chartjs-2';
-import Chart from 'chart.js/auto'
 import LineChart from './LineChart'
 
-
-
-
-
-
-
-function Home(){
+function Home() {
     //usestate of weather data, can be an array
     //useState of soil Moisture data, can also be an array
-    
-    const [restAPI, setRestAPI] = useState({});
-    //const [chartData, setChartData] = useState({})
 
-    
-    //API data with a promise resolve nad useEffect
-    useEffect(() => {
-   
-        //fetch rest api
-        /*
-            json format:
+    const [restAPI, setRestAPI] = useState([]);
 
-            soilMoisture array - read from database
-            last soil moisture reading
-
-        */
+    /* form of 
+        [temp : 25,
+		humidity : 88,
+		pressure : 101325,
+		description : 'sun',
+        weathercode : 200
+        soilMoisture : 100
+        VBat: 69]
         
+        add picture functionality.
+    */
+    const [loading, setLoading] = useState(true);
+    const [err, setError] = useState(null)
+    useEffect(() => {
 
-       
-       
-    
-       
-    },[])
-    
+        const fetchData = async () => { //used callback hell because await was throwing issues
 
-    return(
+            fetch('http://localhost:3001/api').then(re => {
+                if (re.ok) {
+                    return re.json()
+                }
+                throw re
+            }).then(data => {
+                setRestAPI(data)
+                console.log(data)
+
+            }).catch(err => {
+                console.log(err)
+                setError(err)
+            }).finally(() => {
+                setLoading(false);
+
+            })
+
+
+        }
+
+        fetchData()
+
+
+    }, []) //refresh feature might not be needed if recordings are taken out at long spaced out intervals
+
+    if (err) return "error";
+
+    return (
         <div className="Home">
             <Nav />
             <div>
-             <LineChart />   
-            
+                <LineChart data={restAPI} />
             </div>
         </div>
 
-        
-        
     );
-
-
-
 
 }
 export default Home;
