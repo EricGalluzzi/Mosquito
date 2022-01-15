@@ -6,6 +6,7 @@ import { ProgressBar } from 'react-bootstrap';
 import Nav from './features/navBar';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import LineChart from './LineChart'
+import LineChartTest from './testFeatures/LineChartTest'
 
 function Home() {
     //usestate of weather data, can be an array
@@ -41,7 +42,7 @@ function Home() {
 
             }).catch(err => {
                 console.log(err)
-                setError(err)
+                //setError(err)
             }).finally(() => {
                 setLoading(false);
 
@@ -61,7 +62,7 @@ function Home() {
         <div className="Home">
             <Nav />
             <div>
-                <LineChart data={restAPI} />
+                <LineChart data={[{"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":100,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":70,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":69,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":100,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}]} />
             </div>
         </div>
 
