@@ -5,8 +5,9 @@ import { ProgressBar } from 'react-bootstrap';
 
 import Nav from './features/navBar';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import LineChart from './LineChart'
-import LineChartTest from './testFeatures/LineChartTest'
+//import LineChart from './LineChart'
+//import LineChartTest from './testFeatures/LineChartTest'
+import BreakComputer from './testFeatures/BreakComputer'
 
 function Home() {
     //usestate of weather data, can be an array
@@ -50,7 +51,7 @@ function Home() {
 
 
         }
-
+        //let p =[{ "entry": [{"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":100,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":70,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}]}, {"entry": [{"_id":"61dcf08892345810681c7fb","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":69,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}]}, { "entry": [{"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":100,"VBat":100,"expirationSet":"2022-01-10T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":70,"VBat":100,"expirationSet":"2022-01-10T02:50:48.753Z"}]}]} />
         fetchData()
 
 
@@ -62,7 +63,8 @@ function Home() {
         <div className="Home">
             <Nav />
             <div>
-                <LineChart data={[{"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":100,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":70,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":69,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":100,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}]} />
+            
+                <BreakComputer data={restAPI} />
             </div>
         </div>
 

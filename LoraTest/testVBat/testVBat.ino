@@ -29,14 +29,14 @@
 
 #define moisturePin 36;
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
-#define TIME_TO_SLEEP  5     
+#define TIME_TO_SLEEP  720     
 float XS = 0.0032;      //The returned reading is multiplied by this XS to get the battery voltage.
 uint16_t MUL = 1000;
 uint16_t MMUL = 100;
 
 void setup()
 {
-   Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
+  Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
 
   Heltec.display->init();
   Heltec.display->flipScreenVertically();
@@ -81,7 +81,7 @@ void loop()
    while(adcBusy(37));
    Serial.printf("Battery power in GPIO 37: ");
    Serial.println(analogRead(37));
-   Serial.println(analogRead(37)*3.2);
+   Serial.println(analogRead(37)*2.95);
    
    
    uint16_t c2 = analogRead(37);
@@ -89,22 +89,22 @@ void loop()
 
    delay(100);
    
-   adcStart(36);
-   while(adcBusy(36));
-   Serial.printf("voltage input on GPIO 36: ");
-   Serial.println(analogRead(36));
-   uint16_t c1  =  map(analogRead(36), 3500, 120, 0, 100)  ;
-   adcEnd(36);
-
-   
-   Serial.println("-------------");
-   // uint16_t c  =  analogRead(13)*XS*MUL;
-   // Serial.println(analogRead(13));
-   Heltec.display->drawString(0, 0, "Vbat = ");
-  
-   Heltec.display->drawString(45, 40, (String)(c2*2.97)); 
-   Heltec.display->drawString(70, 70, "(mV)");
-   Heltec.display->drawString(0, 40, (String)(c1));
+//   adcStart(36);
+//   while(adcBusy(36));
+//   Serial.printf("voltage input on GPIO 36: ");
+//   Serial.println(analogRead(36));
+//   uint16_t c1  =  map(analogRead(36), 3500, 120, 0, 100)  ;
+//   adcEnd(36);
+//
+//   
+//   Serial.println("-------------");
+//   // uint16_t c  =  analogRead(13)*XS*MUL;
+//   // Serial.println(analogRead(13));
+//   Heltec.display->drawString(0, 0, "Vbat = ");
+//  
+//   Heltec.display->drawString(45, 40, (String)(c2*2.97)); 
+//   Heltec.display->drawString(70, 70, "(mV)");
+//   Heltec.display->drawString(0, 40, (String)(c1));
    
 
     

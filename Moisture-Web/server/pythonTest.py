@@ -33,11 +33,11 @@ def connect_mqtt() -> mqtt_client:
 
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
-        print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+        #print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
         j = json.loads(msg.payload)
         b64 = base64.b64decode(j['payload'])
         mp_dict = msgpack.unpackb(b64)
-        print(b64)
+        print(mp_dict)
 
     client.subscribe(topic)
     client.on_message = on_message

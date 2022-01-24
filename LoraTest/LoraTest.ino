@@ -1,4 +1,4 @@
- 
+  
 /*
  * HelTec Automation(TM) LoRaWAN 1.0.2 OTAA example use OTAA, CLASS A
  *
@@ -169,7 +169,7 @@ void loop()
     }
     case DEVICE_STATE_SLEEP:
     {
-      LoRaWAN.displayAck();
+      
       LoRaWAN.sleep(loraWanClass,debugLevel);
       break;
     }

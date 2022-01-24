@@ -3,6 +3,7 @@
 const express = require("express");
 const path = require('path');
 require('dotenv').config({ path: __dirname + '/process.env' });
+const mqttPass = process.env.MQTTPASSWORD;
 const PORT = process.env.PORT || 3001;
 const mqtt = require('mqtt');
 const app = express();
@@ -16,7 +17,8 @@ const port = '1883'
 const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
 const topic = 'helium/50529e4d-b101-461b-8170-7e7192accc1a/rx'
 const connectUrl = `mqtt://${host}:${port}`
-const request = require('request');
+const clock = require('clock');
+const hoursToMs = 10000; //3600000
 const bodyParser = require("body-parser");
 const msgpack = require('msgpack5')()
 , decode = msgpack.decode;444
@@ -24,8 +26,10 @@ const weather = require('openweather-apis');
 weather.setLang('en');
 weather.setCityId(city);
 weather.setAPPID(apiKey);
+let globalTime = 0;
 
-const {insertObj, retrieveObj} = require('./mongoClient');
+
+const {insertObj, retrieveObj, updateObj} = require('./mongoClient');
 
 let soilMoisture;
 
@@ -35,7 +39,7 @@ const client = mqtt.connect(connectUrl, {
   connectTimeout: 4000,
   debug: true,
   username: 'EGall2004',
-  password: '4930Soccer',
+  password: mqttPass,
   reconnectPeriod: 1000 *1,
 })
 client.on('connect', () => {
@@ -45,7 +49,7 @@ client.on('connect', () => {
     })
     
   })
-let test = '' //access payload globally, theres gotta be a better solution 
+  let test = '' //access payload globally, theres gotta be a better solution 
 client.on('message', (topic, payload) => {
     
     test = JSON.parse(payload);
@@ -53,6 +57,7 @@ client.on('message', (topic, payload) => {
     let buff = new Buffer(test['payload'], 'base64');
     let unpacked = decode(buff);
     soilMoisture = unpacked;
+    
     updateDb(soilMoisture);
     
   })
@@ -74,14 +79,22 @@ const updateDb = (soilMoisture) => {
   
   weather.getSmartJSON(async function(err, smart){
 		
-    let apiPackage = smart
+    let apiPackage = smart;
     apiPackage = Object.assign(apiPackage, soilMoisture); //data also contains vBat
-    
-    await insertObj(apiPackage);
+    if(Date.now() <= globalTime + hoursToMs){
+      updateObj(apiPackage);
+    } else{
+      
+      insertObj(apiPackage);
+      globalTime = Date.now();
+    }
+   
+    // await updateObj(apiPackage);
+    // await insertObj(apiPackage);
   });
 
 }
-updateDb({'soilMoisture' : 69, //test updateDb
+updateDb({'sensorId' : 'adasrasfdf', 'soilMoisture' : 69, //test updateDb
 'VBat' : 100
 });
 
