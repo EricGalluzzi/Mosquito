@@ -5,9 +5,8 @@ import { ProgressBar } from 'react-bootstrap';
 
 import Nav from './features/navBar';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-//import LineChart from './LineChart'
-//import LineChartTest from './testFeatures/LineChartTest'
-import BreakComputer from './testFeatures/BreakComputer'
+
+import GraphManager from './features/graphManager'
 
 function Home() {
     //usestate of weather data, can be an array
@@ -21,7 +20,7 @@ function Home() {
 		pressure : 101325,
 		description : 'sun',
         weathercode : 200
-        soilMoisture : 100
+        sM : 100
         VBat: 69]
         
         add picture functionality.
@@ -64,7 +63,7 @@ function Home() {
             <Nav />
             <div>
             
-                <BreakComputer data={restAPI} />
+                <GraphManager data={restAPI} />
             </div>
         </div>
 
