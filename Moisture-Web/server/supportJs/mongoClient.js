@@ -28,46 +28,43 @@ async function getLastDocumentId(collection){
 
 module.exports = {
 
-async insertObj(obj){
-    try {
-        // Connect the client to the server
-        collection = await run();
+// async insertObj(obj){
+//     try {
+//         // Connect the client to the server
+//         collection = await run();
         
         
-    //     const insertResult = await collection.createIndex({
-    //     "expirationSet": 1
-    // },
-    // {
-    //     unique: true,
-    //     sparse: true,
-    //     expireAfterSeconds: 604800
-    // });
-    const insertDoc = await collection.insertOne({
-      'entry': [obj],
-      'expirationSet' : new Date(),
-      "dateInterval" : (new Date()).toString().substring(0, 10)
+//     //     const insertResult = await collection.createIndex({
+//     //     "expirationSet": 1
+//     // },
+//     // {
+//     //     unique: true,
+//     //     sparse: true,
+//     //     expireAfterSeconds: 604800
+//     // });
+//     const insertDoc = await collection.insertOne({
+//       'entry': [obj],
+//       'expirationSet' : new Date(),
+//       "dateInterval" : (new Date()).toString().substring(0, 10)
 
-    }); //
-    console.log('Inserted documents =>', insertDoc);
+//     }); //
+//     console.log('Inserted documents =>', insertDoc);
           
   
   
-      } finally {
-        // Ensures that the client will close when you finish/error
-        await client.close();
-      }
+//       } finally {
+//         // Ensures that the client will close when you finish/error
+//         await client.close();
+//       }
     
 
-},
+// },
 
-async retrieveObj(){
+async retrieveObj(){ //retrieve entries
     
     try {
         collection = await run();
-        
-        
-        
-  
+
   
       } finally {
         // Ensures that the client will close when you finish/error
@@ -75,54 +72,61 @@ async retrieveObj(){
         await client.close();
         return retrieveDocs
         
-        
-        
-        
       }
       
       
-    
 },
-
-  async updateObj(obj){
+  async handleObj(obj){ //handle new data
     try {
-      // Connect the client to the server
       collection = await run();
-      // var id = (await collection.find().sort({$natural:-1}).limit(1)[0] == undefined) ? 0 : await collection.find().sort({$natural:-1}).limit(1)[0]['_id'];
+      obj["recordedAt"] = (new Date()); //add a date entry with exact time
+      const insertDocuments = await collection.updateOne({"sensorID" : obj.sensorID}, 
+      {$setOnInsert: {"sensorID" : obj.sensorID}, $push: {"entry" : obj} },  //if found, append, if not, insert. 
+      {upsert: true});
+    } finally {
+      await client.close();
+    }
+  }
+
+  // async updateObj(obj){
+  //   try {
+  //     // Connect the client to the server
+  //     collection = await run();
+  //     // var id = (await collection.find().sort({$natural:-1}).limit(1)[0] == undefined) ? 0 : await collection.find().sort({$natural:-1}).limit(1)[0]['_id'];
       
-      let id = await getLastDocumentId(collection);
-      console.log(id);
-      if(id != -1){
-        const updateInfo = {
-          $push: {"entry" : obj}
-        };
-        const insertUpdate = await collection.updateOne({_id : id}, updateInfo);
-        console.log('Updated documents =>', insertUpdate);
-      }
+  //     let id = await getLastDocumentId(collection);
+  //     console.log(id);
+  //     if(id != -1){
+  //       const updateInfo = {
+  //         $push: {"entry" : obj}
+  //       };
+  //       const insertUpdate = await collection.updateOne({_id : id}, updateInfo);
+  //       console.log('Updated documents =>', insertUpdate);
+  //     }
      
       
       
     
     
        
-  //     const insertResult = await collection.createIndex({
-  //     "expirationSet": 1
-  // },
-  // {
-  //     unique: true,
-  //     sparse: true,
-  //     expireAfterSeconds: 30
-  // });
+  // //     const insertResult = await collection.createIndex({
+  // //     "expirationSet": 1
+  // // },
+  // // {
+  // //     unique: true,
+  // //     sparse: true,
+  // //     expireAfterSeconds: 30
+  // // });
   
         
 
 
-    } finally {
-      // Ensures that the client will close when you finish/error
-      await client.close();
-    }
+  //   } finally {
+  //     // Ensures that the client will close when you finish/error
+  //     await client.close();
+  //   }
 
-  }
+  // }
 }
 
 

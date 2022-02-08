@@ -8,11 +8,12 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import GraphManager from './features/graphManager'
 
+
 function Home() {
     //usestate of weather data, can be an array
     //useState of soil Moisture data, can also be an array
 
-    const [restAPI, setRestAPI] = useState([]);
+    const [restAPI, setRestAPI] = useState([]); //will contain backend sensor data.
 
     /* form of 
         [temp : 25,
@@ -25,9 +26,9 @@ function Home() {
         
         add picture functionality.
     */
-    const [loading, setLoading] = useState(true);
-    const [err, setError] = useState(null)
-    useEffect(() => {
+    const [loading, setLoading] = useState(true); //only display page once data is loaded
+    const [err, setError] = useState(null); // handle errors
+    useEffect(() => { //render website when mounted
 
         const fetchData = async () => { //used callback hell because await was throwing issues
 
@@ -50,12 +51,13 @@ function Home() {
 
 
         }
-        //let p =[{ "entry": [{"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":100,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":70,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}]}, {"entry": [{"_id":"61dcf08892345810681c7fb","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":69,"VBat":100,"expirationSet":"2022-01-11T02:50:48.753Z"}]}, { "entry": [{"_id":"61dcf08892345810681c7f7b","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":100,"VBat":100,"expirationSet":"2022-01-10T02:50:48.753Z"}, {"_id":"61dcf08892345810681c7f7","temp":21.89,"humidity":80,"pressure":1021,"description":"clear sky","weathercode":800,"rain":0,"soilMoisture":70,"VBat":100,"expirationSet":"2022-01-10T02:50:48.753Z"}]}]} />
+       
         fetchData()
 
 
-    }, []) //refresh feature might not be needed if recordings are taken out at long spaced out intervals
+    }, []) 
 
+    
     if (err) return "error";
 
     return (

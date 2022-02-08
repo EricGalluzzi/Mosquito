@@ -18,22 +18,17 @@ weather.setAPPID(apiKey);
 let globalTime = 0;
 
 
-const {insertObj, retrieveObj, updateObj} = require('./mongoClient')
+// const {insertObj, retrieveObj, updateObj} = require('./mongoClient')
+const {retrieveObj, handleObj} = require('./mongoClient')
 
 module.exports = {
     async updateDb(soilMoisture) {
   
-    await weather.getSmartJSON(async function(err, smart){
+    await weather.getSmartJSON(async function(err, smart){ //retrieve weather data from API
           
       let apiPackage = smart;
-      apiPackage = Object.assign(apiPackage, soilMoisture); //data also contains vBat
-      if(Date.now() <= globalTime + hoursToMs){ //timer for new db entries. add: instead of using Date, use date of last entry.- avoid creating new entries on server reboot.
-        updateObj(apiPackage);
-      } else{
-        
-        insertObj(apiPackage);
-        globalTime = Date.now();
-      }
+      apiPackage = Object.assign(apiPackage, soilMoisture); //combine weather data with received MQTT data.
+      handleObj(apiPackage) //update/insert weather entries
      
     
     });

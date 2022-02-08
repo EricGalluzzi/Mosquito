@@ -28,21 +28,21 @@ ChartJS.register(
 
 
 const GraphManager = (chart) => {
-  let [vBat, setVBat] = useState([]); //format, array of object ID and vBat
-  let [dataSet, setDataSet] = useState([]);
-  let [bigArray, setBigArray] = useState([]);
-  let [bigArrayLoaded, setBigArrayLoaded] = useState(false);
+  let [vBat, setVBat] = useState([]); //Holds Battery Voltage value for Bar chart
+  let [dataSet, setDataSet] = useState([]); //Contains datasets for line graph. 
+  
+ 
   let [isLoaded, setLoaded] = useState(false); //duplicate testing for dev
 
   useEffect(() => {
 
 
-    if (chart.data.length > 0) {
-      if (!isLoaded) {
+    if (chart.data.length > 0) { //only render when actual data is passed in.
+      if (!isLoaded) { //only render once
 
-        initializeBigArray();
-        createDataSets();
-        vBatDisplay();
+      
+        createDataSets(); //create Data Sets
+        vBatDisplay(); //create vBat display
         setLoaded(true);
 
       }
@@ -50,59 +50,22 @@ const GraphManager = (chart) => {
 
     //createDataSets()
 
-  }, [chart]) //could be refreshed using setInterval, but its known for memory leaks. 
+  }, [chart]) //rerender when restAPI data changes on Home.js
 
 
-  const initializeBigArray = () => {
-
-    let copy = bigArray;
-
-    chart.data.map(x => {
-
-      x.entry.map(y => {
-
-        let exists = findIfIdExists(y.sensorID, copy);
-        if (exists === -1) {
-          copy.push([y]);
-        }
-        else {
-
-          // var valueArr = copy[exists].map((item)=> item.expirationSet );
-          // if(!valueArr.some((item, idx)=> item == y.expirationSet )) 
-          copy[exists].push(y); //delete duplicates because initializeBigArray is called twice
-
-
-        }
-      })
+  
 
 
 
-
-    })
-    setBigArray(copy);
-    setBigArrayLoaded(true); // if this causes a remound we need a way to stop duplicates. 
-  }
-
-  const findIfIdExists = (y, copy) => {
-    for (let i = 0; i < copy.length; i++) {
-
-      if (copy[i][0].sensorID == y){ //look into first element only
-        
-      return i;
-      }
-
-    }
-
-    return -1;
-  }
+ 
 
   //essentially just map a dataset. 
   const createDataSets = () => {
-    console.log(bigArray)
 
-    setDataSet(bigArray.map((x, i) => ({
-      label: (typeof x[0].sensorID === 'undefined') ? 'No Sensor ID' : x[0].sensorID,
-      data: x.map((x) => x.sM),//might not need
+
+    setDataSet(chart.data.map(x => ({
+      label: (typeof x.sensorID === 'undefined') ? 'No Sensor ID' : x.sensorID,
+      data: x.entry.map((y) => y.sM),//data would require parsing through the entry component of each document.
       borderWidth: 1,
       fill: false,
       borderColor: 'red'
@@ -112,10 +75,10 @@ const GraphManager = (chart) => {
 
   const vBatDisplay = () => {
 
-    setVBat(bigArray.map(x => ({
-      "sensorID": (typeof x[0].sensorID === 'undefined') ? 'No Sensor ID' : x[0].sensorID,
-      "vBat": x[x.length - 1].vBat //see if this value is anything
-    })))
+    setVBat(chart.data.map(x => ({
+       "sensorID": (typeof x.sensorID === 'undefined') ? 'No Sensor ID' : x.sensorID,
+      "vBat": x.entry[x.entry.length-1].vBat //get latest battery voltage
+     })))
 
 
 
@@ -128,7 +91,7 @@ const GraphManager = (chart) => {
 
 
   var moistureData = {
-    labels: chart.data.map(x=>x.dateInterval), //fix for legend lengths
+    labels: chart?.data[0]?.entry?.map(y=> y.recordedAt), //fix for legend lengths (do line with max value)
     datasets: dataSet
   };
 
@@ -150,14 +113,14 @@ const GraphManager = (chart) => {
   }
 
   const displayVBat = {
-    labels: vBat.map(x => x.sensorID),
+    labels: chart.data.map(x => x.sensorID),
     datasets: [
       {
         label: 'Battery Voltage',
 
         borderColor: 'red',
         borderWidth: 2,
-        data: vBat.map(x => x.vBat)
+        data: chart.data.map(x => (x.entry[x.entry.length-1].vBat/1000.0))
       }
     ]
   }

@@ -2,9 +2,10 @@
 const path = require('path');
 require('dotenv').config({ path: __dirname + '/process.env' });
 const mqttPass = process.env.MQTTPASSWORD;
+const mqttIP = process.env.MQTTIP
 const mqtt = require('mqtt');
 
-const host = "10.0.0.228"
+const host = mqttIP;
 const port = '1883'
 const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
 const topic = 'helium/+/rx'
@@ -17,7 +18,8 @@ const msgpack = require('msgpack5')()
 const { updateDb } = require('./handleWeather.js');
 let soilMoisture;
 module.exports = {
-
+ 
+//initialize mqtt session
     listen() {
         const client = mqtt.connect(connectUrl, {
             clientId,
@@ -36,9 +38,13 @@ module.exports = {
 
         })
         let test = '' //access payload globally, theres gotta be a better solution 
-        client.on('message', (topic, payload) => {
 
+        //receive Helium publish
+        client.on('message', (topic, payload) => {
+            try {
             test = JSON.parse(payload);
+
+            //unpack data
 
             let buff = new Buffer(test['payload'], 'base64'); //unpack on database retrieve to send less data
             let unpacked = decode(buff);
@@ -46,20 +52,25 @@ module.exports = {
             unpacked["sensorID"]= sensorID;
             soilMoisture = unpacked;
 
-            updateDb(soilMoisture);
+            updateDb(soilMoisture); //when data value is received, access Handle weather JS. 
+
+            } catch (e) {
+                console.log(e);
+                console.log("Usually undefined data");
+            }
 
         })
 
         client.on("error", function (error) {
             console.log("ERROR: ", error);
-        });
+        }); //error mqtt
 
         client.on('offline', function () {
             console.log("offline");
-        });
+        }); //offline mqtt
 
         client.on('reconnect', function () {
             console.log("reconnect");
-        });
+        }); //reconnect mqtt
     }
 }

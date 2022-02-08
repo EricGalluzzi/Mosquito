@@ -29,7 +29,7 @@
 
 
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
-#define TIME_TO_SLEEP  180     
+#define TIME_TO_SLEEP 180      
 float XS = 0.0025;      //The returned reading is multiplied by this XS to get the battery voltage.
 uint16_t MUL = 1000;
 float conversion  = 1.27;
@@ -96,12 +96,12 @@ void loop()
 
    delay(100);
    
-//   adcStart(36);
-//   while(adcBusy(36));
-//   Serial.printf("voltage input on GPIO 36: ");
-//   Serial.println(analogRead(36));
-//   uint16_t c1  =  map(analogRead(36), 3500, 120, 0, 100)  ;
-//   adcEnd(36);
+   adcStart(36);
+   while(adcBusy(36));
+   Serial.printf("voltage input on GPIO 36: ");
+   Serial.println(analogRead(36));
+   uint16_t c1  =  map(analogRead(36), 3500, 120, 0, 100)  ;
+   adcEnd(36);
 //
 //   
     Serial.println("-------------");
@@ -109,7 +109,7 @@ void loop()
 //  
    Heltec.display->drawString(45, 40, (String)(c2*XS*conversion));
    Heltec.display->drawString(70, 70, "(mV)");
-   Heltec.display->drawString(0, 40, (String)(c2));
+   Heltec.display->drawString(0, 40, (String)(c1));
    
 
     

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import {Navbar, Container} from 'react-bootstrap';
-
+//handle navBar
 
 function Nav(){
     return(

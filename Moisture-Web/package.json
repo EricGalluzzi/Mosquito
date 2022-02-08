@@ -18,9 +18,8 @@
     "clock": "^1.0.2",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
-    "mongodb": "^4.3.0",
-    "mongoose": "^6.1.5",
-    "mqtt": "^4.2.8",
+    "mongodb": "^4.3.1",
+    "mqtt": "^4.3.4",
     "msgpack5": "^5.3.2",
     "openweather-apis": "^4.4.2",
     "path": "^0.12.7"
