@@ -4,7 +4,7 @@ An analysis on using soil moisture and additional geospatial data to create a Mo
 
 Our main targets are residential and recreational areas that can be efficiently monitored.
 
-Provides an encouraging intro to the world of IoT. web development, and ML.
+Provides an encouraging intro to the world of IoT, web development, and ML.
 
 Developed by Science National Honors Society 21-22
 
