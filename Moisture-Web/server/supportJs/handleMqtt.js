@@ -15,7 +15,7 @@ const bodyParser = require("body-parser");
 const msgpack = require('msgpack5')()
     , decode = msgpack.decode;
 
-const { updateDb } = require('./handleWeather.js');
+const { handleObj } = require('./mongoClient.js');
 let soilMoisture;
 module.exports = {
  
@@ -52,7 +52,7 @@ module.exports = {
             unpacked["sensorID"]= sensorID;
             soilMoisture = unpacked;
 
-            updateDb(soilMoisture); //when data value is received, access Handle weather JS. 
+            handleObj(soilMoisture); //when data value is received, access Handle weather JS. 
 
             } catch (e) {
                 console.log(e);

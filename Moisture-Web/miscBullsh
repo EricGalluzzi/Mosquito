@@ -53,3 +53,4 @@
 
 
     //     }, []);
+    https://api.openweathermap.org/data/2.5/onecall?lat=26.0573&lon=-80.2717&exclude=minutely&units=imperial&appid=${apiKey}

@@ -77,6 +77,7 @@ void setup()
 
 void loop()
 {
+  delay(2000);
    //WiFi LoRa 32        -- hardare versrion ≥ 2.3
    //WiFi Kit 32         -- hardare versrion ≥ 2
    //Wireless Stick      -- hardare versrion ≥ 2.3
@@ -100,7 +101,8 @@ void loop()
    while(adcBusy(36));
    Serial.printf("voltage input on GPIO 36: ");
    Serial.println(analogRead(36));
-   uint16_t c1  =  map(analogRead(36), 3500, 120, 0, 100)  ;
+   uint16_t c1  =  map(analogRead(36), 3350, 800, 0, 100)  ;
+   Serial.println(c1);
    adcEnd(36);
 //
 //   
@@ -149,10 +151,10 @@ void loop()
   Heltec.display->clear();
   delay(100);
   Serial.println("Going to sleep now");
-  digitalWrite(21, HIGH);
-  pinMode(21, INPUT);
+//  digitalWrite(21, HIGH);
+//  pinMode(21, INPUT);
   
-  esp_deep_sleep_start();
+  //esp_deep_sleep_start();
   Serial.println("This will never be printed");
    
    

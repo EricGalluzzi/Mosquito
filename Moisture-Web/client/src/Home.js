@@ -6,7 +6,9 @@ import { ProgressBar } from 'react-bootstrap';
 import Nav from './features/navBar';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-import GraphManager from './features/graphManager'
+// import GraphManager from './features/graphManager'
+import GraphManager from './features/newGraphFormat'
+
 
 
 function Home() {
@@ -32,7 +34,7 @@ function Home() {
 
         const fetchData = async () => { //used callback hell because await was throwing issues
 
-            fetch('http://localhost:3001/api').then(re => {
+            fetch('/api').then(re => {
                 if (re.ok) {
                     return re.json()
                 }
