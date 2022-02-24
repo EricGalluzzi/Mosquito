@@ -50,8 +50,10 @@
   height: 300px;
 }
 
+
 @media (min-width: 700px) {
   .sub.chart-wrapper {
+    width: 49%;
     display: inline-block;
   }
 }

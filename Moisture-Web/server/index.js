@@ -15,7 +15,7 @@ let cron = require('node-cron')
 const {listen} = require('./supportJs/handleMqtt');
 const {retrieveObj} = require('./supportJs/mongoClient')
 const {updateDb} = require('./supportJs/handleWeather')
-
+const {iLovePython} = require('./supportJs/connect')
 cron.schedule('0 23 * * *', () =>{
   soilMoisture = {"SM" : 76}
   updateDb(soilMoisture);
@@ -36,6 +36,11 @@ app.use(cors());
 app.get("/api", (req, res) => {
 
   (async () => res.json(await retrieveObj("handleData")))() //retrieve mongo entries. Had to be async in order to work properly
+
+});
+app.get("/alert", (req, res) => {
+
+  (async () => res.json(await iLovePython()))() //retrieve mongo entries. Had to be async in order to work properly
 
 });
 

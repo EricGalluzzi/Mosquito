@@ -69,6 +69,7 @@ function Home() {
             
                 <GraphManager data={restAPI} />
             </div>
+            
         </div>
 
     );

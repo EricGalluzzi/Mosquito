@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../App.css';
 import WeatherUpdate from './WeatherUpdate'
+import Alert from '../testFeatures/Alert'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -175,7 +176,9 @@ map a graph for each after creating a a set of graph data
         
       
 
-      
+      <div className = 'alerts'>
+        <Alert/>
+      </div>
       
       <div className='voltageGraph'>
         {vBat.length > 0? <Bar
@@ -183,7 +186,8 @@ map a graph for each after creating a a set of graph data
           height={400}
           options={options}
         /> : "Battery Voltage Unavailable"}
-      </div>
+      </div >
+      <p style ={{textAlign: "center", color: 'red'}}> Values greater than 4.2 Volts indicate solar power is charging </p>
       </div>
     
   )

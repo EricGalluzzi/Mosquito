@@ -75,7 +75,7 @@ function WeatherUpdate() {
             </ul> */}
               <div className="App">
     <header className="d-flex justify-content-center align-items-center">
-      <h2>React Weather App</h2>
+      <h2>SNHS Presents...</h2>
     </header>
     <div className="container">
       <div className="mt-3 d-flex flex-column justify-content-center align-items-center">
@@ -121,7 +121,7 @@ function WeatherUpdate() {
                   {' '}
                   <strong>{weatherAPI.weather[0].main}</strong>
                 </p>
-                <p><strong>Cooper City</strong></p>
+                <p><strong>{typeof weatherAPI.rain === 'undefined' ? "0 " : weatherAPI.rain['3h']} in. of PRCP</strong></p>
               </div>
             </div>
           </div>

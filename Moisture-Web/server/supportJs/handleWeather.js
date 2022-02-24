@@ -10,8 +10,8 @@ const lon = "-80.2717"
 //https://api.openweathermap.org/data/2.5/onecall?lat=26.0573&lon=-80.2717&exclude=minutely&units=imperial&appid=${apiKey}
 //switch to link to get better data 
 const url =  `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=imperial&appid=${apiKey}`;
-const clock = require('clock');
-const hoursToMs = 3600000;
+
+
 const bodyParser = require("body-parser");
 const axios = require("axios")
 const msgpack = require('msgpack5')()
@@ -26,6 +26,13 @@ let globalTime = 0;
 // const {insertObj, retrieveObj, updateObj} = require('./mongoClient')
 const {retrieveObj, findAvgSm} = require('./mongoClient')
 
+const retrieveWeeklyWeather = async () => {
+  let response = await axios.get(url)
+  let weatherData = await response.data.daily
+
+
+  return await weatherData;
+}
 module.exports = { //will be handled by cron at 11:00 every night, since it is in Unix, will it be the next days weather at 11?
   
     async updateDb(soilMoisture) {
@@ -58,6 +65,10 @@ module.exports = { //will be handled by cron at 11:00 every night, since it is i
     
     // }); does not provide daily forecast
   
+  },
+  async retrieveWeather(){
+    let apiPackage = await retrieveWeeklyWeather();
+    return apiPackage
   }
 }
 
