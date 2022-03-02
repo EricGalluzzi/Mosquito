@@ -9,3 +9,7 @@ Provides an encouraging intro to the world of IoT, web development, and ML.
 Developed by Science National Honors Society 21-22
 
 Special thanks to Trevor Overton, Dylan Bober, Ethan Bober, Emily Zucker, Jared Garfinkel, Soumya Joseph, CTV, Mr. Martin, and Mrs. Agnew.
+
+Website: to be deployed once I decide to pay for more EC2 storage :(
+
+![Screen Shot 2022-03-02 at 3 12 40 PM](https://user-images.githubusercontent.com/92798736/156442136-76682942-0326-4268-9b70-704e6c943cc0.png)
