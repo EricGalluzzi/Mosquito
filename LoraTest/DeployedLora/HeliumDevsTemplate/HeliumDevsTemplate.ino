@@ -25,19 +25,19 @@ uint32_t DevAddr =  ( uint32_t )0x007e6ae1;
 DeviceClass_t loraWanClass = CLASS_A;
 
 /*the application data transmission duty cycle.  value in [ms].*/
-uint32_t appTxDutyCycle = 30000;
+uint32_t appTxDutyCycle = 3600000; //1 hr cycles
 
 /*OTAA or ABP*/
 bool overTheAirActivation = true;
 
 /*ADR enable*/
-bool loraWanAdr =false;
+bool loraWanAdr =false; //incorporate this eventually
 
 /* Indicates if the node is sending confirmed or unconfirmed messages */
-bool isTxConfirmed = true;
+bool isTxConfirmed = false; //info is fishy since doesnt update as many times as before
 
 /*LoraWan channelsmask, default channels 0-7*/
-uint16_t userChannelsMask[6]={ 0xFF00,0x0000,0x0000,0x0000,0x0000,0x0000 };
+uint16_t userChannelsMask[6]={ 0xFF00,0x0000,0x0000,0x0000,0x0002,0x0000 };
 
 
 /* Application port */
@@ -92,9 +92,9 @@ void setup()
 {
   
   pinMode(VEXT_PIN, OUTPUT);
-  digitalWrite(VEXT_PIN, LOW);
+  digitalWrite(VEXT_PIN, LOW); //if pin 21 is low, vExt is high
   delay(100);
-  //44initializeHeltec();
+
   adcPrep();
    
   if(mcuStarted==0)
@@ -118,31 +118,30 @@ void setup()
   
 }
 
-// The loop function is called in an endless loop
-
 int recordVBat(){
    adcStart(37);
    while(adcBusy(37));
    Serial.printf("Battery power in GPIO 37: ");
    Serial.println(analogRead(37));
   
-   uint16_t c2 = (int) (analogRead(37)*.0025*1.27*1000);
+   uint16_t batteryV = (int) (analogRead(37)*.0025*1.27*1000);
    adcEnd(37);
 
    delay(100);
-   return c2;
+   return batteryV;
 }
 
-int recordSoilMoisture(){
+intrecordSoilMoisture(){
    adcStart(moisturePin);
    while(adcBusy(moisturePin));
    Serial.printf("voltage input on GPIO 36: ");
    Serial.println(analogRead(moisturePin));
-   uint16_t c1  = map(analogRead(moisturePin), 3500, 120, 0, 100)  ;
+   uint16_t moistureLvl  = map(analogRead(moisturePin), 3500, 120, 0, 100);
+   moistureLvl = constrain(moistureLvl, 0, 100);
    adcEnd(36);
 
     delay(100);
-    return c1;
+    return moistureLvl;
 }
 void loop()
 {
@@ -158,11 +157,10 @@ void loop()
     case DEVICE_STATE_JOIN:
     {
       LoRaWAN.displayJoining();
-      Serial.println(deviceState);
-      Serial.println("prejoin");
+      
       LoRaWAN.join();
-      Serial.println(deviceState);
-      Serial.println("join");
+      
+     
       break;
     }
     case DEVICE_STATE_SEND:
@@ -178,11 +176,9 @@ void loop()
       // Schedule next packet transmission
       txDutyCycleTime = appTxDutyCycle + randr( -APP_TX_DUTYCYCLE_RND, APP_TX_DUTYCYCLE_RND );
       LoRaWAN.cycle(txDutyCycleTime);
-      low_power();
+      low_power(); //activate low power mode to conserve battery
       deviceState = DEVICE_STATE_SLEEP;
       
-      Serial.println(deviceState);
-      Serial.println("cycle");
       
       
       break;
@@ -191,17 +187,9 @@ void loop()
     {
      
       
-      //add a sleep function that deals with the sensor power pins.
-      //Serial.println("dog");
-//      if(hasJoined == 1){
-//        low_power();
-//        Serial.println("prep");
-//      }
-      
       LoRaWAN.sleep(loraWanClass,debugLevel);
       
-      
-      
+     
       break;
     }
     default:
@@ -222,35 +210,10 @@ void low_power(){
 //  pinMode(19, INPUT); //MISO
 //  pinMode(5, INPUT); //SCK
 //  pinMode(14, INPUT); //RST
-//  pinMode(27, INPUT); //MOSI //prob handled by lora.sleep
-  Serial.println("meth");
-  
-}
-void high_power(){
+//  pinMode(27, INPUT); //MOSI //prob handled by lora.sleep (lets pray so far)
 
-  digitalWrite(VEXT_PIN, LOW);
-  pinMode(VEXT_PIN, OUTPUT);
-
-  pinMode(36, OUTPUT);
-  pinMode(19, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(14,OUTPUT);
-  pinMode(27, OUTPUT);
-  
-  
 }
-//void initializeHeltec(){
-//  Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Enable*/, true /*Serial Enable*/);
-//  Heltec.display->init();
-//  Heltec.display->flipScreenVertically();
-//  Heltec.display->setFont(ArialMT_Plain_10);
-//  Heltec.display->drawString(0, 0, "OLED Start");
-//  Heltec.display->display();
-//  delay(1000);
-//  Heltec.display->clear();
-//
-//
-//} library conflict
+
 
 void adcPrep(){
   //analogSetClockDiv(255); // 1338mS
