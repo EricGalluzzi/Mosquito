@@ -76,7 +76,7 @@ module.exports = {
       collection = await run("handleData");
       for (let i = 0; i < newDocs.length; i++){
       let apiPackage = Object.assign(newDocs[i], obj);
-      console.log(apiPackage)
+    
       const insertDocuments = await collection.updateOne({ "sensorID": newDocs[i].sensorID },
         { $setOnInsert: { "sensorID": newDocs[i].sensorID }, $push: { "entry": apiPackage } },  //if found, append, if not, insert. 
         { upsert: true })
@@ -85,7 +85,6 @@ module.exports = {
 
 
 
-      console.log(newDocs)
     } finally {
       await client.close()
       //   }

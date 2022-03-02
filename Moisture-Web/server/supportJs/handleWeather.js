@@ -35,7 +35,7 @@ const retrieveWeeklyWeather = async () => {
 }
 module.exports = { //will be handled by cron at 11:00 every night, since it is in Unix, will it be the next days weather at 11?
   
-    async updateDb(soilMoisture) {
+    async updateDb() {
     
     //what if data is not received for that day?
     try{
@@ -43,15 +43,17 @@ module.exports = { //will be handled by cron at 11:00 every night, since it is i
       let weatherData = await response.data.daily[0] //maybe store next day for the next use in case unix deletes actual daily weather
       let todayDate = new Date().toLocaleString("en-US", {timeZone: "America/New_York"});
       todayDate = todayDate.split(',')[0] //get the date
-      console.log(weatherData)
+    
       //pass in weatherData daily + date for mongo organizing 
+      console.log(weatherData.rain);
       weatherData = ({
         "humidity": weatherData.humidity,
         "TMAX": weatherData.temp.max,
         "TMIN": weatherData.temp.min,
         "WSPEED": weatherData.wind_speed,
-        "PRCP": Object.values(weatherData).indexOf('rain') > -1 ? weatherData.rain : 0.00
+        "PRCP": typeof weatherData.rain === 'undefined' ?  0.00 : weatherData.rain
       })
+      
       await findAvgSm(weatherData, todayDate, await retrieveObj("MoistureWeb"));
     } catch(e){
       console.log(e)

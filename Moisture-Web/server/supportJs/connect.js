@@ -3,6 +3,7 @@ const path = require('path');
 const bodyParser = require("body-parser");
 const axios = require("axios")
 const flaskIP = process.env.FLASKIP;
+
 const {retrieveObj} = require('./mongoClient')
 const {retrieveWeather} = require('./handleWeather')
 module.exports = {

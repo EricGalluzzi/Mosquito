@@ -121,7 +121,7 @@ function WeatherUpdate() {
                   {' '}
                   <strong>{weatherAPI.weather[0].main}</strong>
                 </p>
-                <p><strong>{typeof weatherAPI.rain === 'undefined' ? "0 " : weatherAPI.rain['3h']} in. of PRCP</strong></p>
+                <p><strong>{typeof weatherAPI.rain === 'undefined' ? "0 " : weatherAPI.rain['1h']} hourly mm. of PRCP</strong></p>
               </div>
             </div>
           </div>
