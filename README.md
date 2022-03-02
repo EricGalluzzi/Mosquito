@@ -6,7 +6,7 @@ Our main targets are residential and recreational areas that can be efficiently 
 
 Provides an encouraging intro to the world of IoT, web development, and ML.
 
-Developed by Science National Honors Society 21-22
+Developed by Science National Honor Society 21-22
 
 Special thanks to Trevor Overton, Dylan Bober, Ethan Bober, Emily Zucker, Jared Garfinkel, Soumya Joseph, CTV, Mr. Martin, and Mrs. Agnew.
 
