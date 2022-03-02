@@ -10,7 +10,7 @@ Developed by Science National Honor Society 21-22
 
 Special thanks to Trevor Overton, Dylan Bober, Ethan Bober, Emily Zucker, Jared Garfinkel, Soumya Joseph, CTV, Mr. Martin, and Mrs. Agnew.
 
-Check our Presentation Out: https://drive.google.com/file/d/18C096upnl9SV2A5u7M5qQbDZE-Fb3zc2/view?usp=sharing
+Check our Presentation out: https://drive.google.com/file/d/18C096upnl9SV2A5u7M5qQbDZE-Fb3zc2/view?usp=sharing
 
 Website: to be deployed once I decide to pay for more EC2 storage :(
 
