@@ -12,6 +12,6 @@ Special thanks to Trevor Overton, Dylan Bober, Ethan Bober, Emily Zucker, Jared 
 
 Check our Presentation out: https://drive.google.com/file/d/18C096upnl9SV2A5u7M5qQbDZE-Fb3zc2/view?usp=sharing
 
-Website: to be deployed once I decide to pay for more EC2 storage :(
+Website: cchs-snhs.com -(domain name waiting to be processed: http://ec2-3-86-231-20.compute-1.amazonaws.com/)
 
 ![Screen Shot 2022-03-02 at 3 12 40 PM](https://user-images.githubusercontent.com/92798736/156442136-76682942-0326-4268-9b70-704e6c943cc0.png)
